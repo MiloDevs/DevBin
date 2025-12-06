@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
+from typing import AsyncIterator, AsyncGenerator
 
 from dependency_injector.wiring import Provide, inject
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,6 +22,6 @@ async def _session_scope(factory: sessionmaker) -> AsyncIterator[AsyncSession]:
 @inject
 async def get_session(
     factory: sessionmaker = Provide[Container.session_factory],
-) -> AsyncIterator[AsyncSession]:
+) -> AsyncGenerator[AsyncSession, None]:
     async with _session_scope(factory) as session:
         yield session
